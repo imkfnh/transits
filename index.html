@@ -11,16 +11,12 @@
 <style>
   :root {
     --ink: #07061a;
-    --night: #121030;
-    --veil: #1c1946;
     --moon: #ece8f8;
+    --row: #d6d1f2;
     --mist: #9a95bd;
     --gold: #e8c97a;
     --rose: #f08aa4;
-    --coral: #ff9e7a;
-    --aqua: #7fd1ce;
-    --violet: #a99bff;
-    --line: rgba(169, 155, 255, 0.18);
+    --line: rgba(140, 130, 230, 0.28);
     --font: "Amaranth", system-ui, sans-serif;
   }
   * { box-sizing: border-box; }
@@ -38,49 +34,53 @@
       var(--ink);
     background-attachment: fixed;
   }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:focus-visible, .date-pill:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
   #stars { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-  .page { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; }
+  .page { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 32px 28px 64px; }
+  .glyph { font-family: "Noto Sans Symbols 2", "Noto Sans Symbols", "Segoe UI Symbol", "Apple Symbols", sans-serif; }
 
-  header { margin-bottom: 36px; }
+  /* ---------- Header ---------- */
+  header { margin-bottom: 32px; }
   h1 {
     margin: 0;
-    font-family: var(--font);
     font-weight: 400;
-    font-size: clamp(2.8rem, 9vw, 5rem);
-    line-height: 1.05;
+    font-size: clamp(2rem, 8vw, 4.2rem);
+    line-height: 1.1;
   }
-  .controls { display: flex; flex-wrap: nowrap; gap: clamp(10px, 3vw, 28px); align-items: stretch; margin-top: 22px; }
-  input[type="datetime-local"], button {
-    font: inherit;
-    color: var(--moon);
-    background: rgba(28, 25, 70, 0.7);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 9px 12px;
-  }
-  button { cursor: pointer; }
-  button:hover, input:hover { border-color: rgba(169, 155, 255, 0.5); }
-  button:focus-visible, input:focus-visible, .date-pill:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
-
-  button.pill, .date-pill {
+  .controls {
     display: flex;
     align-items: center;
-    justify-content: center;
-    position: relative;
-    font-size: clamp(0.75rem, 3.4vw, 1.15rem);
-    color: var(--moon);
-    background: rgba(48, 42, 125, 0.45);
-    border: 1px solid rgba(140, 130, 230, 0.35);
-    border-radius: 22px;
-    padding: 14px clamp(12px, 3.5vw, 26px);
-    line-height: 1.3;
+    gap: clamp(14px, 6vw, 40px);
+    margin-top: 16px;
+  }
+  button.pill {
+    flex: 0 0 auto;
+    padding: 12px 22px;
+    font-size: clamp(0.9rem, 3.6vw, 1.15rem);
+    line-height: 1.2;
     white-space: nowrap;
+    background: rgba(48, 42, 125, 0.45);
+    border: 1px solid rgba(140, 130, 230, 0.4);
+    border-radius: 16px;
+  }
+  .date-pill {
+    position: relative;
+    flex: 1 1 auto;
+    max-width: 480px;
+    min-width: 0;
+    padding: 7px 16px;
+    text-align: center;
+    font-size: clamp(0.75rem, 3.2vw, 1rem);
+    white-space: nowrap;
+    color: var(--mist);
+    background: rgba(48, 42, 125, 0.35);
+    border: 1px solid rgba(140, 130, 230, 0.3);
+    border-radius: 14px;
     cursor: pointer;
   }
-  button.pill { flex: 0 0 auto; }
-  .date-pill { flex: 1 1 auto; max-width: 480px; min-width: 0; }
   button.pill:hover, .date-pill:hover { border-color: rgba(169, 155, 255, 0.7); }
-  .date-pill input[type="datetime-local"] {
+  .date-pill input {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -91,67 +91,95 @@
     border: 0;
     padding: 0;
   }
-  .sec-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .sec-head h2 { margin: 0; }
-  button.chip { padding: 5px 12px; font-size: 0.85rem; border-radius: 999px; }
-  button.chip[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
 
+  /* ---------- Sections ---------- */
   .layout { display: grid; gap: 40px; grid-template-columns: 1fr; }
   @media (min-width: 860px) {
-    .layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+    .layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 56px; }
   }
-
-  .glyph { font-family: "Noto Sans Symbols 2", "Noto Sans Symbols", "Segoe UI Symbol", "Apple Symbols", sans-serif; }
-
-  h2 {
-    margin: 0 0 12px;
-    font-family: var(--font);
-    font-weight: 400;
-    font-size: 1.9rem;
+  h2 { margin: 0; font-weight: 400; font-size: 1.6rem; line-height: 1.2; }
+  .sec-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; min-height: 40px; }
+  button.chip {
+    padding: 8px 18px;
+    font-size: 0.95rem;
+    background: transparent;
+    border: 1px solid rgba(150, 140, 240, 0.5);
+    border-radius: 999px;
   }
-  ul.rows { list-style: none; margin: 0; padding: 0; }
-  ul.rows li {
+  button.chip[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+
+  ul.rows { list-style: none; margin: 0; padding: 0; color: var(--row); }
+  ul.rows li { border-bottom: 1px solid var(--line); }
+
+  /* planets */
+  ul.planets li {
     display: grid;
+    grid-template-columns: 30px 64px 20px 24px minmax(0, 1fr) auto;
+    column-gap: 6px;
     align-items: center;
-    gap: 10px;
-    padding: 10px 4px;
-    border-bottom: 1px solid var(--line);
+    padding: 11px 0;
+    font-size: 1.05rem;
   }
-  ul.planets li { grid-template-columns: 34px 82px 1fr auto auto; }
-  ul.aspects li { grid-template-columns: 30px 30px 30px 1fr auto auto; }
-  .g { font-size: 1.4rem; text-align: center; }
-  .pos { font-variant-numeric: tabular-nums; }
-  .sign { color: var(--mist); }
-  .retro { color: var(--rose); font-size: 1.3rem; min-width: 1ch; }
-  .asp-name { text-align: left; font-size: 0.95rem; }
-  .asp-name small { display: block; color: var(--mist); font-size: 0.8rem; }
-  .orb { color: var(--mist); font-size: 0.85rem; text-align: right; font-variant-numeric: tabular-nums; }
-  .applying { color: var(--gold); }
-  .info-btn { padding: 5px 12px; font-size: 0.85rem; border-radius: 999px; }
-  .info-btn[aria-expanded="true"] { border-color: var(--gold); color: var(--gold); }
+  .g { font-size: 1.4rem; text-align: center; line-height: 1; }
+  .retro { color: var(--rose); font-size: 1.2rem; text-align: center; }
+  .sign-g { font-size: 1.2rem; text-align: center; }
+  .pos { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+  .pos small { color: var(--mist); font-size: 0.8rem; }
+
+  /* aspects */
+  ul.aspects li {
+    display: grid;
+    /* left pad | three even columns | spacer | info button | right pad */
+    grid-template-columns: 2% repeat(3, 20%) minmax(0, 1fr) auto 5%;
+    align-items: center;
+    padding: 10px 0;
+  }
+  ul.aspects li > .cell:nth-child(1) { grid-column: 2; }
+  ul.aspects li > .cell:nth-child(2) { grid-column: 3; }
+  ul.aspects li > .cell:nth-child(3) { grid-column: 4; }
+  ul.aspects li > .info-btn { grid-column: 6; }
+  .cell { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; line-height: 1.2; min-width: 0; white-space: nowrap; }
+  .cell .big { font-size: 2rem; line-height: 1.1; color: var(--moon); }
+  .cell .lbl { font-size: 0.95rem; color: #b9b4d8; }
+  .cell .sub { font-size: 0.75rem; color: var(--mist); }
+
+  /* info buttons and panels */
+  button.info-btn {
+    padding: 5px 12px;
+    font-size: 0.85rem;
+    color: #9d98c8;
+    background: transparent;
+    border: 1px solid #5b55a0;
+    border-radius: 10px;
+  }
+  button.info-btn.solid {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    background: #33437d;
+    border: 0;
+    border-radius: 14px;
+  }
+  button.info-btn[aria-expanded="true"] { border-color: var(--gold); color: var(--gold); }
+  button.info-btn.solid[aria-expanded="true"] { background: #3f5199; color: var(--gold); }
   .info-panel {
     grid-column: 1 / -1;
-    margin: 2px 0 6px;
+    margin: 2px 0 10px;
     padding: 4px 16px 8px;
     background: rgba(28, 25, 70, 0.55);
     border: 1px solid var(--line);
     border-radius: 12px;
+    text-align: left;
   }
   .info-panel[hidden] { display: none; }
   .info-cat { padding: 10px 0; border-bottom: 1px solid var(--line); }
   .info-cat:last-child { border-bottom: 0; }
-  .info-cat h3 {
-    margin: 0 0 2px;
-    font-family: var(--font);
-    font-weight: 700;
-    font-size: 1.15rem;
-    color: var(--gold);
-  }
-  .info-cat p { margin: 0; font-size: 0.95rem; }
+  .info-cat h3 { margin: 0 0 2px; font-weight: 700; font-size: 1.1rem; color: var(--gold); }
+  .info-cat p { margin: 0; font-size: 0.95rem; color: var(--moon); }
   .info-cat p.placeholder { color: var(--mist); font-style: italic; }
-  .empty { color: var(--mist); padding: 12px 4px; }
 
-  footer { margin-top: 48px; color: var(--mist); font-size: 0.85rem; max-width: 60ch; }
+  footer { margin-top: 48px; color: var(--mist); font-size: 0.85rem; max-width: 64ch; }
   #error { display: none; padding: 16px; border: 1px solid var(--rose); border-radius: 10px; margin-bottom: 24px; }
 </style>
 </head>
@@ -162,7 +190,7 @@
   <header>
     <h1>Current Transits</h1>
     <div class="controls">
-      <button id="now-btn" type="button" class="pill">Back to now</button>
+      <button id="now-btn" type="button" class="pill">back to now</button>
       <label class="date-pill">
         <span id="date-text"></span>
         <input id="when-input" type="datetime-local" aria-label="Choose a date and time">
@@ -183,7 +211,9 @@
       <ul class="rows planets" id="planets"></ul>
     </section>
     <section aria-labelledby="as-h">
-      <h2 id="as-h">Aspects</h2>
+      <div class="sec-head">
+        <h2 id="as-h">Aspects</h2>
+      </div>
       <ul class="rows aspects" id="aspects"></ul>
     </section>
   </div>
@@ -197,11 +227,20 @@
 <script>
 (function () {
   const VS = "\uFE0E"; // forces text (not emoji) rendering for symbols
+  const G = s => s + VS;
+
+  // noRetro: bodies that are never marked retrograde (Sun and Moon)
   const BODIES = [
-    { id: "Sun", g: "☉" }, { id: "Moon", g: "☽" }, { id: "Mercury", g: "☿" },
-    { id: "Venus", g: "♀" }, { id: "Mars", g: "♂" }, { id: "Jupiter", g: "♃" },
-    { id: "Saturn", g: "♄" }, { id: "Uranus", g: "♅" }, { id: "Neptune", g: "♆" },
-    { id: "Pluto", g: "♇" }
+    { id: "Sun", name: "Sun", g: "☉", noRetro: true },
+    { id: "Moon", name: "Moon", g: "☽", noRetro: true },
+    { id: "Mercury", name: "Mercury", g: "☿" },
+    { id: "Venus", name: "Venus", g: "♀" },
+    { id: "Mars", name: "Mars", g: "♂" },
+    { id: "Jupiter", name: "Jupiter", g: "♃" },
+    { id: "Saturn", name: "Saturn", g: "♄" },
+    { id: "Uranus", name: "Uranus", g: "♅" },
+    { id: "Neptune", name: "Neptune", g: "♆" },
+    { id: "Pluto", name: "Pluto", g: "♇" }
   ];
   const SIGNS = [
     ["Aries", "♈"], ["Taurus", "♉"], ["Gemini", "♊"], ["Cancer", "♋"],
@@ -216,7 +255,7 @@
     { name: "Opposition",  angle: 180, orb: 8, g: "☍", color: "#ff9e7a" }
   ];
 
-  // ---------- Aspect info ----------
+  // ---------- Info content ----------
   const CATEGORIES = [
     ["core", "Core"],
     ["emotional", "Emotional"],
@@ -224,44 +263,47 @@
     ["shadow", "Shadow"],
     ["best", "Best use"]
   ];
-  // Fill in text here. Key format: "Planet-Planet-Aspect", with the planets in this order:
+  // Fill in text here. Aspect keys are "Body-Body-Aspect" with the bodies in this order:
   // Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
   // Example: "Moon-Saturn-Trine": { core: "...", emotional: "...", interpersonal: "...", shadow: "...", best: "..." }
   const ASPECT_INFO = {};
-  // Planet entries use just the planet name: "Moon": { core: "...", emotional: "...", ... }
+  // Planet keys are just the planet name: "Moon", "Saturn", ...
   const PLANET_INFO = {};
 
-  function infoBlock(key, info, label) {
+  const openPanels = new Set(); // keeps panels open when the lists refresh
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const aspectKey = (a, b, asp) => `${a.id}-${b.id}-${asp.name}`;
+
+  function infoBlock(key, info, label, solid) {
     const isOpen = openPanels.has(key);
     const cats = CATEGORIES.map(([id, name]) => {
       const text = info[id];
       return `<div class="info-cat"><h3>${name}</h3>${text ? `<p>${esc(text)}</p>` : `<p class="placeholder">Info coming soon.</p>`}</div>`;
     }).join("");
-    return `<button type="button" class="info-btn" data-key="${key}" aria-expanded="${isOpen}" aria-controls="info-${key}" aria-label="Info about ${label}">Info</button>
+    return `<button type="button" class="info-btn${solid ? " solid" : ""}" data-key="${key}" aria-expanded="${isOpen}" aria-controls="info-${key}" aria-label="Info about ${label}">info</button>
       <div class="info-panel" id="info-${key}" ${isOpen ? "" : "hidden"}>${cats}</div>`;
   }
 
-  const aspectKey = (a, b, asp) => `${a.id}-${b.id}-${asp.name}`;
-  const openPanels = new Set(); // keeps panels open when the list refreshes
-  const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-
+  // ---------- Astronomy ----------
+  const D2R = Math.PI / 180;
   const norm360 = x => ((x % 360) + 360) % 360;
   const norm180 = x => { x = norm360(x); return x > 180 ? x - 360 : x; };
   const pad = n => String(n).padStart(2, "0");
-  const G = s => s + VS;
 
   function lonAt(id, date) {
-    const vec = Astronomy.GeoVector(id, date, true);
-    return norm360(Astronomy.Ecliptic(vec).elon);
+    return norm360(Astronomy.Ecliptic(Astronomy.GeoVector(id, date, true)).elon);
   }
 
   function computePlanets(date) {
     const DAY = 86400000;
     return BODIES.map(b => {
       const lon = lonAt(b.id, date);
-      const before = lonAt(b.id, new Date(date.getTime() - DAY / 2));
-      const after = lonAt(b.id, new Date(date.getTime() + DAY / 2));
-      const retro = b.id !== "Sun" && b.id !== "Moon" && norm180(after - before) < 0;
+      let retro = false;
+      if (!b.noRetro) {
+        const before = lonAt(b.id, new Date(date.getTime() - DAY / 2));
+        const after = lonAt(b.id, new Date(date.getTime() + DAY / 2));
+        retro = norm180(after - before) < 0;
+      }
       return { ...b, lon, retro };
     });
   }
@@ -304,28 +346,28 @@
       const pos = fmtPos(p.lon);
       return `<li>
         <span class="g glyph">${G(p.g)}</span>
-        <span>${p.id}</span>
-        <span class="pos">${showDegrees ? pos.text + " " : ""}<span class="sign">${pos.sign}</span> <span class="glyph sign">${G(pos.glyph)}</span></span>
+        <span>${p.name}</span>
         <span class="retro glyph"${p.retro ? ' role="img" aria-label="Retrograde" title="Retrograde"' : ""}>${p.retro ? G("℞") : ""}</span>
-        ${infoBlock(p.id, PLANET_INFO[p.id] || {}, p.id)}
+        <span class="sign-g glyph">${G(pos.glyph)}</span>
+        <span class="pos"><span>${pos.sign}</span>${showDegrees ? `<small>${pos.text}</small>` : ""}</span>
+        ${infoBlock(p.id, PLANET_INFO[p.id] || {}, p.name, false)}
       </li>`;
     }).join("");
 
     const el = document.getElementById("aspects");
     if (!aspects.length) {
-      el.innerHTML = `<li class="empty">No major aspects within orb at this moment.</li>`;
+      el.innerHTML = `<li style="padding:12px 0;color:var(--mist)">No major aspects within orb at this moment.</li>`;
       return;
     }
     el.innerHTML = aspects.map(({ a, b, asp, orb, applying }) => {
       const key = aspectKey(a, b, asp);
+      const sub = showDegrees ? `<span class="sub">${fmtDeg(orb)} · ${applying ? "applying" : "separating"}</span>` : "";
       return `<li>
-      <span class="g glyph">${G(a.g)}</span>
-      <span class="g glyph" style="color:${asp.color}" title="${asp.name}">${G(asp.g)}</span>
-      <span class="g glyph">${G(b.g)}</span>
-      <span class="asp-name"><span style="color:${asp.color}">${asp.name}</span><small>${a.id} and ${b.id}</small></span>
-      <span class="orb">${showDegrees ? `${fmtDeg(orb)}<br><span class="${applying ? "applying" : ""}">${applying ? "applying" : "separating"}</span>` : ""}</span>
-      ${infoBlock(key, ASPECT_INFO[key] || {}, `${a.id} ${asp.name} ${b.id}`)}
-    </li>`;
+        <span class="cell"><span class="big glyph">${G(a.g)}</span><span class="lbl">${a.name}</span></span>
+        <span class="cell"><span class="big glyph" style="color:${asp.color}">${G(asp.g)}</span><span class="lbl" style="color:${asp.color}">${asp.name}</span>${sub}</span>
+        <span class="cell"><span class="big glyph">${G(b.g)}</span><span class="lbl">${b.name}</span></span>
+        ${infoBlock(key, ASPECT_INFO[key] || {}, `${a.name} ${asp.name} ${b.name}`, true)}
+      </li>`;
     }).join("");
   }
 
@@ -356,12 +398,11 @@
   let current = new Date();
   const input = document.getElementById("when-input");
 
+  const toLocalInput = d =>
+    `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
   const fmtPill = d =>
     d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) +
     " at " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-
-  const toLocalInput = d =>
-    `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
   function render() {
     if (typeof Astronomy === "undefined") {
@@ -397,7 +438,6 @@
 
   // Desktop browsers focus a segment on click, so open the picker explicitly
   input.addEventListener("click", () => { try { input.showPicker(); } catch (e) {} });
-
   input.addEventListener("change", () => {
     const d = new Date(input.value);
     if (isNaN(d)) return;
